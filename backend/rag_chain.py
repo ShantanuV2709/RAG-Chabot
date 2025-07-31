@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
-GOOGLE_API_KEY = os.getenv("AIzaSyCU9mfpe7IIrRytl6Pi1Bm3i8b0pFSRzZ8")
+API_KEY = os.getenv("GOOGLE_API_KEY")
 
 loader = TextLoader("data/knowledge.txt")
 pdf_loader = PyPDFLoader("data/knowledge.pdf")
@@ -20,12 +20,12 @@ splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
 split_docs = splitter.split_documents(all_docs)
 print(f"✅ Total chunks loaded: {len(split_docs)}")
 
-embedding = GoogleGenerativeAIEmbeddings(model="models/embedding-001", google_api_key="AIzaSyCU9mfpe7IIrRytl6Pi1Bm3i8b0pFSRzZ8")
+embedding = GoogleGenerativeAIEmbeddings(model="models/embedding-001", google_api_key="API_KEY")
 vectorstore = Chroma.from_documents(split_docs, embedding=embedding)
 retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
 
 memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True, output_key="answer")
-llm = GoogleGenerativeAI(model="models/gemini-1.5-flash", google_api_key="AIzaSyCU9mfpe7IIrRytl6Pi1Bm3i8b0pFSRzZ8")
+llm = GoogleGenerativeAI(model="models/gemini-1.5-flash", google_api_key="API_KEY")
 
 
 qa_chain = ConversationalRetrievalChain.from_llm(
